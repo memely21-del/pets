@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Your pet's portrait</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="wrap estado">
+  <p><a href="./">&larr; Free watercolor pet portraits</a></p>
+  <h1 id="t">Your pet's portrait</h1>
+  <p id="m" class="lead">Loading...</p>
+  <div id="r"></div>
+  <p class="small">Questions? Write to <a href="mailto:retratos@emelytugc.com">retratos@emelytugc.com</a> with this page's link.</p>
+</main>
+<script>
+const API = "https://script.google.com/macros/s/AKfycbxVTytIhXMh8Al6qhgX6c2UeSUbcJsaWSSMMWDJ8_NSrJEe4XX5BwSLR4hcB7Z5EvGn/exec";
+const q = new URLSearchParams(location.search), $ = id => document.getElementById(id);
+const MOTIVO = {persona: "we can only paint pets, and your photo shows a person", sin_mascota: "we couldn't find a pet in your photo",
+  no_es_foto: "we need a real photo (not a drawing or screenshot)", borrosa: "your photo is a bit blurry",
+  cara_no_visible: "we can't see your pet's face clearly", formato: "we couldn't open your file",
+  revision_humana: "we couldn't make a portrait we were happy with from this photo"};
+fetch(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") + "&k=" + encodeURIComponent(q.get("k") || ""))
+  .then(r => r.json()).then(d => {
+    if (!d.ok) { $("m").textContent = "We couldn't find this portrait. Please check your link."; return; }
+    const pet = d.mascota || "your pet";
+    $("t").textContent = pet + "'s portrait";
+    if (d.estado === "listo" && d.retrato) {
+      $("m").textContent = "Here it is! Download it and share it with your friends.";
+      const src = "data:image/jpeg;base64," + d.retrato;
+      $("r").innerHTML = '<img class="retrato" alt="Watercolor portrait of ' + pet.replace(/[<>"&]/g, "") + '"><p><a class="btn" download="watercolor-portrait.jpg">Download</a></p>';
+      $("r").querySelector("img").src = src; $("r").querySelector("a").href = src;
+    } else if (d.estado === "rechazado") {
+      $("m").textContent = "We couldn't paint this one because " + (MOTIVO[d.motivo] || MOTIVO.revision_humana) +
+        ". Please write to retratos@emelytugc.com with a new photo (your pet alone, facing the camera, good light).";
+    } else {
+      $("m").textContent = (q.get("nuevo") ? "Thank you! " : "") + "We're painting " + pet +
+        " now. Your portrait will appear on this page within 48 hours. Bookmark this page or save its link.";
+    }
+  }).catch(() => { $("m").textContent = "Something went wrong. Please reload this page."; });
+</script>
+</body>
+</html>

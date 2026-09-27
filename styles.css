@@ -1,0 +1,57 @@
+:root{
+  --bg:#fbf6ef; --ink:#3b2f2a; --soft:#7a6a60; --peach:#f3d9c4; --peach2:#eec5a8;
+  --gold:#b88a4a; --btn:#8a5a3b; --btn-ink:#fff; --card:#fffaf4; --line:#ead9c8;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Inter,system-ui,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.2;margin:0 0 .5em}
+h1{font-size:clamp(30px,7vw,46px)}
+h1 span{color:var(--gold)}
+h2{font-size:clamp(24px,5vw,30px);margin-top:0}
+h3{font-size:19px}
+a{color:var(--btn)}
+.hero{background:radial-gradient(120% 90% at 50% 0%,var(--peach) 0%,var(--bg) 70%);padding:56px 0 48px;text-align:center}
+.badge{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--gold);font-weight:600;font-size:14px;padding:6px 14px;border-radius:999px;margin:0 0 18px}
+.lead{font-size:18px;color:var(--soft);max-width:34em;margin:0 auto 26px}
+.btn{display:inline-block;background:var(--btn);color:var(--btn-ink);text-decoration:none;font-weight:600;font-size:18px;padding:16px 28px;border-radius:14px;min-height:48px;box-shadow:0 6px 18px rgba(138,90,59,.22)}
+.btn:hover,.btn:focus-visible{background:#734a30;outline:none}
+.btn:focus-visible{box-shadow:0 0 0 4px var(--peach2)}
+.small{font-size:14px;color:var(--soft);margin-top:14px}
+main section.wrap{padding-top:44px;padding-bottom:44px}
+.steps ol{list-style:none;padding:0;margin:0;display:grid;gap:18px}
+.steps li{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.steps .n{flex:0 0 36px;height:36px;border-radius:50%;background:var(--peach);color:var(--ink);font-weight:700;display:grid;place-items:center}
+.steps p{margin:0;color:var(--soft)}
+.cards{display:grid;gap:16px}
+@media(min-width:620px){.cards{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.card.accent{border-color:var(--peach2);background:#fff5ec}
+.card p{margin:0;color:var(--soft)}
+.price{font-weight:700;color:var(--gold)!important;margin-bottom:6px!important;font-size:15px;text-transform:uppercase;letter-spacing:.04em}
+.examples .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.examples img{width:100%;height:auto;border-radius:12px;display:block}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:600;min-height:28px}
+.faq details p{color:var(--soft);margin:.6em 0 0}
+main section.cta-end{text-align:center;padding-top:8px;padding-bottom:56px}
+.foot{border-top:1px solid var(--line);padding:22px 20px 40px;text-align:center;font-size:14px;color:var(--soft)}
+.legal{padding:40px 20px 60px}
+.legal p,.legal li{color:var(--soft)}
+.examples .grid{grid-template-columns:1fr}
+.examples .par{display:grid;grid-template-columns:1fr 2fr;gap:6px;align-items:center;margin:0}
+.examples .par img{height:auto}
+@media (min-width:720px){.examples .grid{grid-template-columns:repeat(2,1fr)}}
+.pedir form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:8px}
+.pedir label{font-weight:600}
+.pedir input[type=file],.pedir input:not([type]),.pedir input[type=email]{font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;width:100%;box-sizing:border-box}
+.pedir .check{font-weight:400;display:flex;gap:10px;align-items:flex-start}
+.pedir .check input{margin-top:6px;width:18px;height:18px;flex:none}
+.pedir .ayuda{margin-top:0}
+.pedir .btn{border:0;cursor:pointer;margin-top:8px;justify-self:start}
+.pedir .btn:disabled{opacity:.6;cursor:wait}
+.msg{min-height:1.4em;font-weight:600;color:var(--btn)}
+.oculto{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.estado{padding-top:28px;padding-bottom:48px;text-align:center}
+.estado .retrato{width:100%;max-width:560px;height:auto;border-radius:14px;box-shadow:0 8px 24px rgba(59,47,42,.15)}

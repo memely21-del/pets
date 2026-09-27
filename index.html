@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Watercolor Pet Portrait</title>
+<meta name="description" content="Upload a photo of your pet and get a soft watercolor portrait in your inbox. 50 free portraits this week.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="badge" id="cupo">Only 50 free portraits this week</p>
+    <h1>Your pet, painted in soft watercolor.<br><span>Free.</span></h1>
+    <p class="lead">Upload one photo of your dog, cat or any pet. We turn it into a gentle watercolor portrait and send it to your inbox.</p>
+    <a class="btn" href="#pedir">Get my free portrait</a>
+    <p class="small">One per person · Ready within 48 hours · No account needed</p>
+  </div>
+</header>
+
+<main>
+
+  <section class="wrap steps" aria-labelledby="how">
+    <h2 id="how">How it works</h2>
+    <ol>
+      <li><span class="n">1</span><div><h3>Upload a photo</h3><p>A clear photo of your pet, face visible, good light.</p></div></li>
+      <li><span class="n">2</span><div><h3>We paint it</h3><p>Your photo becomes a soft watercolor portrait, checked to make sure it looks like your pet.</p></div></li>
+      <li><span class="n">3</span><div><h3>Open your private link</h3><p>You get a private link when you send your photo. Your free portrait appears there, ready for your phone and social media.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="wrap offer" aria-labelledby="get">
+    <h2 id="get">What you get</h2>
+    <div class="cards">
+      <article class="card">
+        <p class="price">Free</p>
+        <h3>Phone &amp; social size</h3>
+        <p>Your watercolor portrait, sized for your phone and social media, with a small signature in the corner.</p>
+      </article>
+      <article class="card accent">
+        <p class="price">Optional · $9</p>
+        <h3>Print-ready keepsake</h3>
+        <p>Large, printable version without the signature, with your pet's name: on a soft paper border or in a Christmas frame. A lovely gift.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- EJEMPLOS hechos con fotos CC0 (Wikimedia Commons, ver ejemplos/CREDITOS_CC0.txt): NO son clientes y se dice. -->
+  <section class="wrap examples" id="examples" aria-labelledby="ex">
+    <h2 id="ex">See how it looks</h2>
+    <p class="small">Left: the photo. Right: the free portrait you'd receive. These examples were made from free stock photos, not customer pets.</p>
+    <div class="grid">
+      <figure class="par"><img src="ejemplos/x06_rottweiler_foto.jpg" alt="Original photo of a rottweiler puppy" loading="lazy" width="333" height="500"><img src="ejemplos/x06_rottweiler_retrato.jpg" alt="Watercolor portrait of a rottweiler puppy" loading="lazy" width="600" height="900"></figure>
+      <figure class="par"><img src="ejemplos/x05_tuxedo_foto.jpg" alt="Original photo of a black and white cat" loading="lazy" width="399" height="500"><img src="ejemplos/x05_tuxedo_retrato.jpg" alt="Watercolor portrait of a black and white cat" loading="lazy" width="718" height="900"></figure>
+      <figure class="par"><img src="ejemplos/x01_labrador_foto.jpg" alt="Original photo of a chocolate labrador" loading="lazy" width="500" height="333"><img src="ejemplos/x01_labrador_retrato.jpg" alt="Watercolor portrait of a chocolate labrador" loading="lazy" width="900" height="600"></figure>
+      <figure class="par"><img src="ejemplos/x09_gatito_naranja_foto.jpg" alt="Original photo of an orange kitten" loading="lazy" width="375" height="500"><img src="ejemplos/x09_gatito_naranja_retrato.jpg" alt="Watercolor portrait of an orange kitten" loading="lazy" width="675" height="900"></figure>
+      <figure class="par"><img src="ejemplos/x10_corgi_foto.jpg" alt="Original photo of a corgi standing up" loading="lazy" width="334" height="500"><img src="ejemplos/x10_corgi_retrato.jpg" alt="Watercolor portrait of a corgi standing up" loading="lazy" width="601" height="900"></figure>
+      <figure class="par"><img src="ejemplos/x02_gato_unsplash_foto.jpg" alt="Original photo of a tabby and white cat" loading="lazy" width="500" height="310"><img src="ejemplos/x02_gato_unsplash_retrato.jpg" alt="Watercolor portrait of a tabby and white cat" loading="lazy" width="900" height="557"></figure>
+    </div>
+  </section>
+
+  <section class="wrap faq" aria-labelledby="q">
+    <h2 id="q">Questions</h2>
+    <details><summary>Is it really free?</summary><p>Yes. The phone-size portrait is free. The print-ready version is optional.</p></details>
+    <details><summary>How long does it take?</summary><p>Within 48 hours, on the private link you get when you send your photo. When the 50 spots are taken, the form closes until next week.</p></details>
+    <details><summary>Is this made with AI?</summary><p>Yes. Portraits are created with AI tools from your photo and checked for likeness before they are delivered.</p></details>
+    <details><summary>What if it doesn't look like my pet?</summary><p>Write to <a href="mailto:retratos@emelytugc.com">retratos@emelytugc.com</a> with your private link and we will redo it.</p></details>
+    <details><summary>Which photos work best?</summary><p>One pet per photo, face clearly visible, good light, no people in the picture.</p></details>
+    <details><summary>What do you do with my photo?</summary><p>We only use it to paint your portrait. Our AI provider (OpenAI) processes it for that, and we remove its hidden location data first. We delete it 30 days after delivery and we never sell it. See our <a href="privacy.html">privacy notice</a>.</p></details>
+  </section>
+
+  <section class="wrap pedir" id="pedir" aria-labelledby="pd">
+    <h2 id="pd">Get your free portrait</h2>
+    <form id="f" novalidate>
+      <label for="foto">Your pet's photo</label>
+      <input type="file" id="foto" accept="image/*" required>
+      <p class="small ayuda">Your pet alone, facing the camera, in good light. Eyes open is best.</p>
+      <label for="mascota">Your pet's name</label>
+      <input id="mascota" maxlength="30" required autocomplete="off">
+      <label for="email">Your email</label>
+      <input id="email" type="email" required autocomplete="email">
+      <label for="instagram">Your Instagram (optional)</label>
+      <input id="instagram" maxlength="40" autocomplete="off">
+      <label class="check"><input type="checkbox" id="derechos" required> I took this photo or have the right to use it.</label>
+      <label class="check"><input type="checkbox" id="ofertas"> Send me occasional offers (unsubscribe anytime).</label>
+      <label class="check"><input type="checkbox" id="publicar"> You may share my pet's portrait on your social media.</label>
+      <input id="web" name="web" class="oculto" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" id="enviar" type="submit">Send my photo</button>
+      <p id="msg" class="msg" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="wrap cta-end">
+    <a class="btn" href="#pedir">Get my free portrait</a>
+  </section>
+
+</main>
+<script>
+const API = "https://script.google.com/macros/s/AKfycbxVTytIhXMh8Al6qhgX6c2UeSUbcJsaWSSMMWDJ8_NSrJEe4XX5BwSLR4hcB7Z5EvGn/exec";
+const $ = id => document.getElementById(id);
+fetch(API + "?accion=cupo").then(r => r.json()).then(d => {
+  if (d.ok) $("cupo").textContent = d.quedan > 0 ? "Only " + d.quedan + " free portraits left this week" : "This week's free portraits are taken";
+}).catch(() => {});
+async function reducir(file) {  // 1600 px y JPEG nuevo: la foto viaja ligera y SIN datos de ubicacion
+  const img = await createImageBitmap(file);
+  const k = Math.min(1, 1600 / Math.max(img.width, img.height));
+  const c = document.createElement("canvas");
+  c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+  const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.88));
+  const u8 = new Uint8Array(await blob.arrayBuffer());
+  let bin = ""; for (let i = 0; i < u8.length; i += 32768) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 32768));
+  return btoa(bin);
+}
+const ERR = {lleno: "This week's 50 free spots are taken. Please come back next week!",
+  duplicado: "You already asked for a free portrait with this email.",
+  foto: "We couldn't read that photo. Please try another one (JPG or PNG).",
+  datos: "Please check your pet's name and your email.",
+  derechos: "Please confirm you have the right to use this photo."};
+$("f").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const msg = $("msg"), b = $("enviar");
+  const f = $("foto").files[0];
+  if (!f) { msg.textContent = "Please choose a photo of your pet."; return; }
+  if (!$("mascota").value.trim() || !$("email").checkValidity() || !$("email").value) { msg.textContent = ERR.datos; return; }
+  if (!$("derechos").checked) { msg.textContent = ERR.derechos; return; }
+  b.disabled = true; msg.textContent = "Sending your photo...";
+  try {
+    const foto = await reducir(f);
+    const r = await fetch(API, {method: "POST", body: JSON.stringify({accion: "pedido", foto,
+      mascota: $("mascota").value.trim(), email: $("email").value.trim(), instagram: $("instagram").value.trim(),
+      derechos: $("derechos").checked, ofertas: $("ofertas").checked, publicar: $("publicar").checked, web: $("web").value})});
+    const d = await r.json();
+    if (d.ok) { location.href = "r.html?id=" + encodeURIComponent(d.id) + "&k=" + encodeURIComponent(d.k) + "&nuevo=1"; return; }
+    msg.textContent = ERR[d.error] || "Something went wrong. Please try again.";
+  } catch (e) {
+    msg.textContent = f.type.includes("heic") ? ERR.foto : "Something went wrong. Please try again.";
+  }
+  b.disabled = false;
+});
+</script>
+
+
+<footer class="wrap foot">
+  <p>Watercolor pet portraits · <a href="mailto:retratos@emelytugc.com">retratos@emelytugc.com</a> · <a href="privacy.html">Privacy</a></p>
+</footer>
+
+</body>
+</html>
