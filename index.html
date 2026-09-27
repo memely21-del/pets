@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>if (location.protocol === "http:" && !/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) location.replace("https:" + location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Free Watercolor Pet Portrait</title>
-<meta name="description" content="Upload a photo of your pet and get a soft watercolor portrait in your inbox. 50 free portraits this week.">
+<meta name="description" content="Upload a photo of your pet and get a soft watercolor portrait on your own private page. Free, only 50 each week.">
+<meta property="og:title" content="Free Watercolor Pet Portrait">
+<meta property="og:description" content="Upload a photo of your pet and get a soft watercolor portrait. Free, only 50 each week.">
+<meta property="og:image" content="https://emelytugc.com/pets/ejemplos/x01_labrador_retrato.jpg">
+<meta property="og:url" content="https://emelytugc.com/pets/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%90%BE%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -14,11 +21,11 @@
 
 <header class="hero">
   <div class="wrap">
-    <p class="badge" id="cupo">Only 50 free portraits this week</p>
+    <p class="badge" id="cupo">Only 50 free portraits each week</p>
     <h1>Your pet, painted in soft watercolor.<br><span>Free.</span></h1>
-    <p class="lead">Upload one photo of your dog, cat or any pet. We turn it into a gentle watercolor portrait and send it to your inbox.</p>
+    <p class="lead">Upload one photo of your dog, cat or any pet. We turn it into a gentle watercolor portrait and show it on your own private page.</p>
     <a class="btn" href="#pedir">Get my free portrait</a>
-    <p class="small">One per person · Ready within 48 hours · No account needed</p>
+    <p class="small">One per person · Usually ready within 48 hours · No account needed</p>
   </div>
 </header>
 
@@ -42,7 +49,7 @@
         <p>Your watercolor portrait, sized for your phone and social media, with a small signature in the corner.</p>
       </article>
       <article class="card accent">
-        <p class="price">Optional · $9</p>
+        <p class="price">Coming soon · $9</p>
         <h3>Print-ready keepsake</h3>
         <p>Large, printable version without the signature, with your pet's name: on a soft paper border or in a Christmas frame. A lovely gift.</p>
       </article>
@@ -65,12 +72,12 @@
 
   <section class="wrap faq" aria-labelledby="q">
     <h2 id="q">Questions</h2>
-    <details><summary>Is it really free?</summary><p>Yes. The phone-size portrait is free. The print-ready version is optional.</p></details>
-    <details><summary>How long does it take?</summary><p>Within 48 hours, on the private link you get when you send your photo. When the 50 spots are taken, the form closes until next week.</p></details>
+    <details><summary>Is it really free?</summary><p>Yes. The phone-size portrait is free.</p></details>
+    <details><summary>How long does it take?</summary><p>Usually within 48 hours, and often much sooner, on the private link you get when you send your photo. When the free spots are taken, the form closes for a few days until spots free up again.</p></details>
     <details><summary>Is this made with AI?</summary><p>Yes. Portraits are created with AI tools from your photo and checked for likeness before they are delivered.</p></details>
-    <details><summary>What if it doesn't look like my pet?</summary><p>Write to <a href="mailto:retratos@emelytugc.com">retratos@emelytugc.com</a> with your private link and we will redo it.</p></details>
+    <details><summary>What if it doesn't look like my pet?</summary><p>Open your private link and tap &ldquo;Not my pet? Try again&rdquo;. Then you can send another photo.</p></details>
     <details><summary>Which photos work best?</summary><p>One pet per photo, face clearly visible, good light, no people in the picture.</p></details>
-    <details><summary>What do you do with my photo?</summary><p>We only use it to paint your portrait. Our AI provider (OpenAI) processes it for that, and we remove its hidden location data first. We delete it 30 days after delivery and we never sell it. See our <a href="privacy.html">privacy notice</a>.</p></details>
+    <details><summary>What do you do with my photo?</summary><p>We only use it to paint your portrait. Our AI provider (OpenAI) processes it for that, and we remove its hidden location data first. We delete it about 30 days after your order and we never sell it. See our <a href="privacy.html">privacy notice</a>.</p></details>
   </section>
 
   <section class="wrap pedir" id="pedir" aria-labelledby="pd">
@@ -82,13 +89,13 @@
       <label for="mascota">Your pet's name</label>
       <input id="mascota" maxlength="30" required autocomplete="off">
       <label for="email">Your email</label>
-      <input id="email" type="email" required autocomplete="email">
+      <input id="email" type="email" required autocomplete="email" pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}">
       <label for="instagram">Your Instagram (optional)</label>
       <input id="instagram" maxlength="40" autocomplete="off">
       <label class="check"><input type="checkbox" id="derechos" required> I took this photo or have the right to use it.</label>
       <label class="check"><input type="checkbox" id="ofertas"> Send me occasional offers (unsubscribe anytime).</label>
       <label class="check"><input type="checkbox" id="publicar"> You may share my pet's portrait on your social media.</label>
-      <input id="web" name="web" class="oculto" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input id="hp" name="hp" class="oculto" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button class="btn" id="enviar" type="submit">Send my photo</button>
       <p id="msg" class="msg" role="status" aria-live="polite"></p>
     </form>
@@ -103,20 +110,34 @@
 const API = "https://script.google.com/macros/s/AKfycbxVTytIhXMh8Al6qhgX6c2UeSUbcJsaWSSMMWDJ8_NSrJEe4XX5BwSLR4hcB7Z5EvGn/exec";
 const $ = id => document.getElementById(id);
 fetch(API + "?accion=cupo").then(r => r.json()).then(d => {
-  if (d.ok) $("cupo").textContent = d.quedan > 0 ? "Only " + d.quedan + " free portraits left this week" : "This week's free portraits are taken";
+  if (!d.ok) return;
+  $("cupo").textContent = d.quedan > 0 ? "Only " + d.quedan + " free portraits left" : "All free portraits are taken for now";
+  if (d.quedan <= 0) { $("enviar").disabled = true; $("msg").textContent = ERR.lleno; }  // "the form closes"
 }).catch(() => {});
 async function reducir(file) {  // 1600 px y JPEG nuevo: la foto viaja ligera y SIN datos de ubicacion
   const img = await createImageBitmap(file);
   const k = Math.min(1, 1600 / Math.max(img.width, img.height));
   const c = document.createElement("canvas");
   c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+  const x = c.getContext("2d");
+  x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height);  // PNG transparente: fondo blanco (el JPEG lo pondria negro)
+  x.drawImage(img, 0, 0, c.width, c.height);
   const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.88));
   const u8 = new Uint8Array(await blob.arrayBuffer());
   let bin = ""; for (let i = 0; i < u8.length; i += 32768) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 32768));
   return btoa(bin);
 }
-const ERR = {lleno: "This week's 50 free spots are taken. Please come back next week!",
+const RID = window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(36).slice(2);  // numero de envio
+async function enviarPedido(datos) {  // Google a veces pierde la respuesta: hasta 3 intentos con el mismo numero de envio
+  for (let i = 0; i < 3; i++) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 45000);
+    try { return await (await fetch(API, {method: "POST", body: JSON.stringify({...datos, rid: RID}), signal: ctl.signal})).json(); }
+    catch (e) { if (i < 2) { $("msg").textContent = "Still sending..."; await new Promise(r => setTimeout(r, 2500)); } }
+    finally { clearTimeout(t); }
+  }
+  throw new Error("red");
+}
+const ERR = {lleno: "All free spots are taken right now. Spots free up over the next few days, please come back soon!",
   duplicado: "You already asked for a free portrait with this email.",
   foto: "We couldn't read that photo. Please try another one (JPG or PNG).",
   datos: "Please check your pet's name and your email.",
@@ -129,16 +150,16 @@ $("f").addEventListener("submit", async ev => {
   if (!$("mascota").value.trim() || !$("email").checkValidity() || !$("email").value) { msg.textContent = ERR.datos; return; }
   if (!$("derechos").checked) { msg.textContent = ERR.derechos; return; }
   b.disabled = true; msg.textContent = "Sending your photo...";
+  let foto;
+  try { foto = await reducir(f); } catch (e) { msg.textContent = ERR.foto; b.disabled = false; return; }  // PDF, Word, HEIC en PC...
   try {
-    const foto = await reducir(f);
-    const r = await fetch(API, {method: "POST", body: JSON.stringify({accion: "pedido", foto,
+    const d = await enviarPedido({accion: "pedido", foto,
       mascota: $("mascota").value.trim(), email: $("email").value.trim(), instagram: $("instagram").value.trim(),
-      derechos: $("derechos").checked, ofertas: $("ofertas").checked, publicar: $("publicar").checked, web: $("web").value})});
-    const d = await r.json();
-    if (d.ok) { location.href = "r.html?id=" + encodeURIComponent(d.id) + "&k=" + encodeURIComponent(d.k) + "&nuevo=1"; return; }
+      derechos: $("derechos").checked, ofertas: $("ofertas").checked, publicar: $("publicar").checked, web: $("hp").value});
+    if (d.ok) { location.replace("r.html?id=" + encodeURIComponent(d.id) + "&k=" + encodeURIComponent(d.k) + "&nuevo=1"); return; }
     msg.textContent = ERR[d.error] || "Something went wrong. Please try again.";
   } catch (e) {
-    msg.textContent = f.type.includes("heic") ? ERR.foto : "Something went wrong. Please try again.";
+    msg.textContent = "Something went wrong. Please try again.";
   }
   b.disabled = false;
 });

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>if (location.protocol === "http:" && !/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) location.replace("https:" + location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Your pet's portrait</title>
@@ -22,22 +23,49 @@ const MOTIVO = {persona: "we can only paint pets, and your photo shows a person"
   no_es_foto: "we need a real photo (not a drawing or screenshot)", borrosa: "your photo is a bit blurry",
   cara_no_visible: "we can't see your pet's face clearly", formato: "we couldn't open your file",
   revision_humana: "we couldn't make a portrait we were happy with from this photo"};
-fetch(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") + "&k=" + encodeURIComponent(q.get("k") || ""))
-  .then(r => r.json()).then(d => {
+const NUEVA = '<p><a class="btn" href="./#pedir">Send a new photo</a></p>';
+async function pedirEstado(url) {  // Google a veces pierde la respuesta: hasta 3 intentos
+  for (let i = 0; ; i++) {
+    try { return await (await fetch(url)).json(); }
+    catch (e) { if (i === 2) throw e; await new Promise(r => setTimeout(r, 2000)); }
+  }
+}
+pedirEstado(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") + "&k=" + encodeURIComponent(q.get("k") || ""))
+  .then(d => {
     if (!d.ok) { $("m").textContent = "We couldn't find this portrait. Please check your link."; return; }
     const pet = d.mascota || "your pet";
     $("t").textContent = pet + "'s portrait";
     if (d.estado === "listo" && d.retrato) {
       $("m").textContent = "Here it is! Download it and share it with your friends.";
       const src = "data:image/jpeg;base64," + d.retrato;
-      $("r").innerHTML = '<img class="retrato" alt="Watercolor portrait of ' + pet.replace(/[<>"&]/g, "") + '"><p><a class="btn" download="watercolor-portrait.jpg">Download</a></p>';
+      $("r").innerHTML = '<img class="retrato" alt="Watercolor portrait of ' + pet.replace(/[<>"&]/g, "") + '"><p><a class="btn" download="watercolor-portrait.jpg">Download</a></p>' +
+        '<p class="small">On iPhone: press and hold the picture, then tap &ldquo;Save to Photos&rdquo;.</p>' +
+        '<p class="small"><a href="#" id="otra">Not my pet? Try again with another photo</a></p>';
       $("r").querySelector("img").src = src; $("r").querySelector("a").href = src;
+      $("otra").onclick = async ev => {
+        ev.preventDefault();
+        if (!confirm("This lets you send another photo of your pet. Continue?")) return;
+        const x = await fetch(API, {method: "POST", body: JSON.stringify({accion: "no_parecido", id: q.get("id"), k: q.get("k")})})
+          .then(r => r.json()).catch(() => ({}));
+        if (x.ok) location.href = "./#pedir"; else alert("Something went wrong. Please try again.");
+      };
+    } else if (d.estado === "listo") {
+      $("m").textContent = "For your privacy, this portrait was deleted about 30 days after your order.";
     } else if (d.estado === "rechazado") {
-      $("m").textContent = "We couldn't paint this one because " + (MOTIVO[d.motivo] || MOTIVO.revision_humana) +
-        ". Please write to retratos@emelytugc.com with a new photo (your pet alone, facing the camera, good light).";
+      $("m").textContent = (d.motivo === "no_se_parece" ? "Sorry it didn't look like " + pet + ". "
+        : "We couldn't paint this one because " + (MOTIVO[d.motivo] || MOTIVO.revision_humana) + ". ") +
+        "You can send a new photo: your pet alone, facing the camera, in good light.";
+      $("r").innerHTML = NUEVA;
     } else {
       $("m").textContent = (q.get("nuevo") ? "Thank you! " : "") + "We're painting " + pet +
-        " now. Your portrait will appear on this page within 48 hours. Bookmark this page or save its link.";
+        " now. Your portrait will usually appear on this page within 48 hours. Save this page's link: it's the only way to see it.";
+      $("r").innerHTML = '<p><button class="btn" id="copiar" type="button">Copy my private link</button></p>';
+      $("copiar").onclick = () => {
+        const enlace = location.href.replace(/&nuevo=1/, "");
+        (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(enlace) : Promise.reject()).then(
+          () => { $("copiar").textContent = "Link copied!"; },
+          () => { prompt("Copy your private link:", enlace); });
+      };
     }
   }).catch(() => { $("m").textContent = "Something went wrong. Please reload this page."; });
 </script>
