@@ -24,7 +24,7 @@ const MOTIVO = {persona: "we can only paint pets, and your photo shows a person"
   cara_no_visible: "we can't see your pet's face clearly", formato: "we couldn't open your file",
   revision_humana: "we couldn't make a portrait we were happy with from this photo"};
 const NUEVA = '<p><a class="btn" href="./#pedir">Send a new photo</a></p>';
-const PAGO = "__ENLACE_DE_PAGO__";  // enlace de pago de Stripe (se pone al publicar; el del sandbox solo en local)
+const PAGO = "https://buy.stripe.com/aFadR33kKdAPebn02v0VO00";  // enlace de pago de Stripe (se pone al publicar; el del sandbox solo en local)
 if (!q.get("id") && q.get("pagado")) {  // vuelta de Stripe: a su pagina privada (guardada al pulsar "Get it")
   let v = null;
   try { v = localStorage.getItem("pedido_actual"); } catch (e) {}
@@ -44,7 +44,7 @@ async function pedirEstado(url) {  // Google a veces pierde la respuesta: hasta 
 pedirEstado(API + "?accion=estado&sin_tarjeta=1&id=" + encodeURIComponent(q.get("id") || "") + "&k=" + encodeURIComponent(q.get("k") || ""))
   .then(d => {
     if (!d.ok) {
-      $("m").textContent = q.get("pagado") && !q.get("id") ? "Thank you! Open your private link again: if your payment went through, your files will appear there within a few minutes."
+      $("m").textContent = q.get("pagado") && !q.get("id") ? "Thank you! Open your private link again: if your payment went through, your files will appear there, usually within an hour."
         : "We couldn't find this portrait. Please check your link.";
       return;
     }
@@ -110,7 +110,7 @@ pedirEstado(API + "?accion=estado&sin_tarjeta=1&id=" + encodeURIComponent(q.get(
       } else if (d.hd === "pagado") {  // pago CONFIRMADO por el servidor
         hd.innerHTML = '<h2>Payment received. Thank you!</h2><p>We are preparing your print-ready files. Refresh this page in a few minutes (usually within an hour).</p>';
       } else if (q.get("pagado")) {  // vuelta de Stripe: aun sin confirmar (la fabrica lo mira cada 5 min)
-        hd.innerHTML = '<h2>Thank you!</h2><p>We are confirming your payment with Stripe. Your print-ready files will appear here within a few minutes: refresh this page.</p>';
+        hd.innerHTML = '<h2>Thank you!</h2><p>We are confirming your payment with Stripe. Your print-ready files will appear here, usually within an hour: refresh this page.</p>';
       } else if (d.comprable && PAGO.startsWith("https://")) {
         hd.innerHTML = '<h2>Want it on your wall?</h2><p>Get the <b>print-ready version</b> for <b>$9</b>: high resolution (prints up to 8x10 in), no signature, with ' +
           petSafe + '&rsquo;s name on a soft paper border, plus a Christmas-frame version. Print it at home or at a local photo store.</p>' +
