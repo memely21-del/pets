@@ -157,7 +157,10 @@ const ERR = {lleno: "All free spots are taken right now. Spots free up over the 
   duplicado: "You already asked for a free portrait with this email.",
   foto: "We couldn't read that photo. Please try another one (JPG or PNG).",
   datos: "Please check your pet's name and your email.",
-  derechos: "Please confirm you have the right to use this photo."};
+  derechos: "Please confirm you have the right to use this photo.",
+  correo: "Please use your usual email address (temporary email services aren't accepted).",
+  ocupado: "We're getting a lot of requests right now. Please try again in about an hour!",
+  foto_repetida: "This photo was already used for a free portrait. Please choose a different photo."};
 $("f").addEventListener("submit", async ev => {
   ev.preventDefault();
   const msg = $("msg"), b = $("enviar");
