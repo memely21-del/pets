@@ -25,7 +25,7 @@
     <h1>Your pet, painted in soft watercolor.<br><span>Free.</span></h1>
     <p class="lead">Upload one photo of your dog, cat or any pet. We turn it into a gentle watercolor portrait and show it on your own private page.</p>
     <a class="btn" href="#pedir">Get my free portrait</a>
-    <p class="small">One per person · Usually ready within 48 hours · No account needed</p>
+    <p class="small">One per person · Usually ready within 48 hours · Free Christmas card included</p>
   </div>
 </header>
 
@@ -46,7 +46,7 @@
       <article class="card">
         <p class="price">Free</p>
         <h3>Phone &amp; social size</h3>
-        <p>Your watercolor portrait, sized for your phone and social media, with a small signature in the corner.</p>
+        <p>Your watercolor portrait, sized for your phone and social media, with a small signature in the corner. Plus a Christmas card with your pet's name, ready to share.</p>
       </article>
       <article class="card accent">
         <p class="price">Coming soon · $9</p>
@@ -68,16 +68,22 @@
       <figure class="par"><img src="ejemplos/x10_corgi_foto.jpg" alt="Original photo of a corgi standing up" loading="lazy" width="334" height="500"><img src="ejemplos/x10_corgi_retrato.jpg" alt="Watercolor portrait of a corgi standing up" loading="lazy" width="601" height="900"></figure>
       <figure class="par"><img src="ejemplos/x02_gato_unsplash_foto.jpg" alt="Original photo of a tabby and white cat" loading="lazy" width="500" height="310"><img src="ejemplos/x02_gato_unsplash_retrato.jpg" alt="Watercolor portrait of a tabby and white cat" loading="lazy" width="900" height="557"></figure>
     </div>
+    <figure style="margin:28px auto 0;max-width:420px;text-align:center">
+      <img src="ejemplos/x10_corgi_tarjeta.jpg" alt="Example Christmas card with a watercolor corgi portrait" loading="lazy"
+           width="1024" height="1536" style="width:100%;height:auto;border-radius:14px">
+      <figcaption class="small">Every free portrait comes with a Christmas card like this one, with your pet's name (example).</figcaption>
+    </figure>
   </section>
 
   <section class="wrap faq" aria-labelledby="q">
     <h2 id="q">Questions</h2>
     <details><summary>Is it really free?</summary><p>Yes. The phone-size portrait is free.</p></details>
     <details><summary>How long does it take?</summary><p>Usually within 48 hours, and often much sooner, on the private link you get when you send your photo. When the free spots are taken, the form closes for a few days until spots free up again.</p></details>
+    <details><summary>What is the free Christmas card?</summary><p>Your pet's watercolor portrait in a holly frame with &ldquo;Merry Christmas from&rdquo; and your pet's name. Download it or share it from your private page. No shipping, so it's never late.</p></details>
     <details><summary>Is this made with AI?</summary><p>Yes. Portraits are created with AI tools from your photo and checked for likeness before they are delivered.</p></details>
     <details><summary>What if it doesn't look like my pet?</summary><p>Open your private link and tap &ldquo;Not my pet? Try again&rdquo;. Then you can send another photo.</p></details>
     <details><summary>Which photos work best?</summary><p>One pet per photo, face clearly visible, good light, no people in the picture.</p></details>
-    <details><summary>What do you do with my photo?</summary><p>We only use it to paint your portrait. Our AI provider (OpenAI) processes it for that, and we remove its hidden location data first. We delete it about 30 days after your order and we never sell it. See our <a href="privacy.html">privacy notice</a>.</p></details>
+    <details><summary>What do you do with my photo?</summary><p>We only use it to paint your portrait. Our AI provider (OpenAI) processes it for that, and we remove its hidden location data first. We delete it about 30 days after your order (fully erased from our cloud trash within 30 more days) and we never sell it. See our <a href="privacy.html">privacy notice</a>.</p></details>
   </section>
 
   <section class="wrap pedir" id="pedir" aria-labelledby="pd">
@@ -131,11 +137,16 @@ const RID = window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now(
 async function enviarPedido(datos) {  // Google a veces pierde la respuesta: hasta 3 intentos con el mismo numero de envio
   for (let i = 0; i < 3; i++) {
     const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 45000);
-    try { return await (await fetch(API, {method: "POST", body: JSON.stringify({...datos, rid: RID}), signal: ctl.signal})).json(); }
-    catch (e) { if (i < 2) { $("msg").textContent = "Still sending..."; await new Promise(r => setTimeout(r, 2500)); } }
-    finally { clearTimeout(t); }
+    try {
+      const d = await (await fetch(API, {method: "POST", body: JSON.stringify({...datos, rid: RID}), signal: ctl.signal})).json();
+      if (d.error !== "servidor" || i === 2) return d;  // "servidor" = Google saturado un momento: se reintenta
+    } catch (e) {
+      if (i === 2) throw e;
+    } finally {
+      clearTimeout(t);
+    }
+    $("msg").textContent = "Still sending..."; await new Promise(r => setTimeout(r, 2500));
   }
-  throw new Error("red");
 }
 const ERR = {lleno: "All free spots are taken right now. Spots free up over the next few days, please come back soon!",
   duplicado: "You already asked for a free portrait with this email.",

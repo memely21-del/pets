@@ -24,10 +24,15 @@ const MOTIVO = {persona: "we can only paint pets, and your photo shows a person"
   cara_no_visible: "we can't see your pet's face clearly", formato: "we couldn't open your file",
   revision_humana: "we couldn't make a portrait we were happy with from this photo"};
 const NUEVA = '<p><a class="btn" href="./#pedir">Send a new photo</a></p>';
+const evento = tipo => fetch(API, {method: "POST", body: JSON.stringify({accion: "evento", id: q.get("id"), k: q.get("k"), tipo})}).catch(() => {});
 async function pedirEstado(url) {  // Google a veces pierde la respuesta: hasta 3 intentos
   for (let i = 0; ; i++) {
-    try { return await (await fetch(url)).json(); }
-    catch (e) { if (i === 2) throw e; await new Promise(r => setTimeout(r, 2000)); }
+    try {
+      const d = await (await fetch(url)).json();
+      if (d.error !== "servidor") return d;  // Google saturado un momento: se reintenta
+      if (i === 2) throw new Error("servidor");
+    } catch (e) { if (i === 2) throw e; }
+    await new Promise(r => setTimeout(r, 2000));
   }
 }
 pedirEstado(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") + "&k=" + encodeURIComponent(q.get("k") || ""))
@@ -42,6 +47,24 @@ pedirEstado(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") +
         '<p class="small">On iPhone: press and hold the picture, then tap &ldquo;Save to Photos&rdquo;.</p>' +
         '<p class="small"><a href="#" id="otra">Not my pet? Try again with another photo</a></p>';
       $("r").querySelector("img").src = src; $("r").querySelector("a").href = src;
+      $("r").querySelector("a").onclick = () => evento("descarga_retrato");
+      if (d.tarjeta) {  // tarjeta de Navidad gratis (piloto): descargar y compartir, midiendo el uso
+        const tsrc = "data:image/jpeg;base64," + d.tarjeta, s = document.createElement("section");
+        s.style.marginTop = "40px";
+        s.innerHTML = '<h2>Your free Christmas card</h2><img class="retrato" alt="Christmas card with ' + pet.replace(/[<>"&]/g, "") +
+          '"><p><a class="btn" id="dt" download="christmas-card.jpg">Download the card</a></p>';
+        $("r").appendChild(s);
+        s.querySelector("img").src = tsrc; $("dt").href = tsrc;
+        $("dt").onclick = () => evento("descarga_tarjeta");
+        fetch(tsrc).then(x => x.blob()).then(b => {
+          const file = new File([b], "christmas-card.jpg", {type: "image/jpeg"});
+          if (!(navigator.canShare && navigator.canShare({files: [file]}))) return;  // compartir solo donde el movil lo permite
+          const bt = document.createElement("button");
+          bt.className = "btn"; bt.type = "button"; bt.textContent = "Share the card"; bt.style.marginTop = "4px";
+          bt.onclick = () => navigator.share({files: [file], title: pet + "'s Christmas card"}).then(() => evento("compartir_tarjeta")).catch(() => {});
+          s.appendChild(bt);
+        }).catch(() => {});
+      }
       $("otra").onclick = async ev => {
         ev.preventDefault();
         if (!confirm("This lets you send another photo of your pet. Continue?")) return;
