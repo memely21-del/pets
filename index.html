@@ -116,6 +116,9 @@
 </main>
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxVTytIhXMh8Al6qhgX6c2UeSUbcJsaWSSMMWDJ8_NSrJEe4XX5BwSLR4hcB7Z5EvGn/exec";
+// de donde viene la visita (?g=fb1 en el enlace de cada grupo/post): se guarda con el pedido para saber que canal funciona
+const FUENTE = (() => { const g = (new URLSearchParams(location.search).get("g") || "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 30);
+  try { if (g) sessionStorage.setItem("fuente", g); return g || sessionStorage.getItem("fuente") || ""; } catch (e) { return g; } })();  // sessionStorage: dura lo que la pestana (recargas incluidas), no para siempre
 const $ = id => document.getElementById(id);
 fetch(API + "?accion=cupo").then(r => r.json()).then(d => {
   if (!d.ok) return;
@@ -168,7 +171,7 @@ $("f").addEventListener("submit", async ev => {
   try {
     const d = await enviarPedido({accion: "pedido", foto,
       mascota: $("mascota").value.trim(), email: $("email").value.trim(), instagram: $("instagram").value.trim(),
-      derechos: $("derechos").checked, ofertas: $("ofertas").checked, publicar: $("publicar").checked, web: $("hp").value});
+      derechos: $("derechos").checked, ofertas: $("ofertas").checked, publicar: $("publicar").checked, web: $("hp").value, fuente: FUENTE});
     if (d.ok) { location.replace("r.html?id=" + encodeURIComponent(d.id) + "&k=" + encodeURIComponent(d.k) + "&nuevo=1"); return; }
     msg.textContent = ERR[d.error] || "Something went wrong. Please try again.";
   } catch (e) {
