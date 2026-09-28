@@ -12,7 +12,7 @@
 <main class="wrap estado">
   <p><a href="./">&larr; Free watercolor pet portraits</a></p>
   <h1 id="t">Your pet's portrait</h1>
-  <p id="m" class="lead">Loading...</p>
+  <p id="m" class="lead">Loading your portrait... this can take a few seconds.</p>
   <div id="r"></div>
   <p class="small">Questions? Write to <a href="mailto:retratos@emelytugc.com">retratos@emelytugc.com</a> with this page's link.</p>
 </main>
@@ -24,6 +24,12 @@ const MOTIVO = {persona: "we can only paint pets, and your photo shows a person"
   cara_no_visible: "we can't see your pet's face clearly", formato: "we couldn't open your file",
   revision_humana: "we couldn't make a portrait we were happy with from this photo"};
 const NUEVA = '<p><a class="btn" href="./#pedir">Send a new photo</a></p>';
+const PAGO = "__ENLACE_DE_PAGO__";  // enlace de pago de Stripe (se pone al publicar; el del sandbox solo en local)
+if (!q.get("id") && q.get("pagado")) {  // vuelta de Stripe: a su pagina privada (guardada al pulsar "Get it")
+  let v = null;
+  try { v = localStorage.getItem("pedido_actual"); } catch (e) {}
+  if (v) { try { const u = new URL(v); u.searchParams.set("pagado", "1"); location.replace(u.href); } catch (e) {} }
+}
 const evento = tipo => fetch(API, {method: "POST", body: JSON.stringify({accion: "evento", id: q.get("id"), k: q.get("k"), tipo})}).catch(() => {});
 async function pedirEstado(url) {  // Google a veces pierde la respuesta: hasta 3 intentos
   for (let i = 0; ; i++) {
@@ -35,9 +41,13 @@ async function pedirEstado(url) {  // Google a veces pierde la respuesta: hasta 
     await new Promise(r => setTimeout(r, 2000));
   }
 }
-pedirEstado(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") + "&k=" + encodeURIComponent(q.get("k") || ""))
+pedirEstado(API + "?accion=estado&sin_tarjeta=1&id=" + encodeURIComponent(q.get("id") || "") + "&k=" + encodeURIComponent(q.get("k") || ""))
   .then(d => {
-    if (!d.ok) { $("m").textContent = "We couldn't find this portrait. Please check your link."; return; }
+    if (!d.ok) {
+      $("m").textContent = q.get("pagado") && !q.get("id") ? "Thank you! Open your private link again: if your payment went through, your files will appear there within a few minutes."
+        : "We couldn't find this portrait. Please check your link.";
+      return;
+    }
     const pet = d.mascota || "your pet";
     $("t").textContent = pet + "'s portrait";
     if (d.estado === "listo" && d.retrato) {
@@ -48,12 +58,10 @@ pedirEstado(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") +
         '<p class="small"><a href="#" id="otra">Not my pet? Try again with another photo</a></p>';
       $("r").querySelector("img").src = src; $("r").querySelector("a").href = src;
       $("r").querySelector("a").onclick = () => evento("descarga_retrato");
-      if (d.tarjeta) {  // tarjeta de Navidad gratis (piloto): descargar y compartir, midiendo el uso
-        const tsrc = "data:image/jpeg;base64," + d.tarjeta, s = document.createElement("section");
-        s.style.marginTop = "40px";
+      const ponerTarjeta = (b64, s) => {  // tarjeta de Navidad gratis: descargar y compartir, midiendo el uso
+        const tsrc = "data:image/jpeg;base64," + b64;
         s.innerHTML = '<h2>Your free Christmas card</h2><img class="retrato" alt="Christmas card with ' + pet.replace(/[<>"&]/g, "") +
           '"><p><a class="btn" id="dt" download="christmas-card.jpg">Download the card</a></p>';
-        $("r").appendChild(s);
         s.querySelector("img").src = tsrc; $("dt").href = tsrc;
         $("dt").onclick = () => evento("descarga_tarjeta");
         fetch(tsrc).then(x => x.blob()).then(b => {
@@ -64,7 +72,74 @@ pedirEstado(API + "?accion=estado&id=" + encodeURIComponent(q.get("id") || "") +
           bt.onclick = () => navigator.share({files: [file], title: pet + "'s Christmas card"}).then(() => evento("compartir_tarjeta")).catch(() => {});
           s.appendChild(bt);
         }).catch(() => {});
+      };
+      if (d.tarjeta || d.tiene_tarjeta) {  // su hueco va ya en su sitio; con el servidor nuevo llega en una 2a peticion
+        const s = document.createElement("section");
+        s.style.marginTop = "40px";
+        s.innerHTML = '<p class="small">Loading your Christmas card...</p>';
+        $("r").appendChild(s);
+        if (d.tarjeta) ponerTarjeta(d.tarjeta, s);
+        else pedirEstado(API + "?accion=tarjeta&id=" + encodeURIComponent(q.get("id")) + "&k=" + encodeURIComponent(q.get("k")))
+          .then(t => { if (t.ok) ponerTarjeta(t.b64, s); else s.remove(); }).catch(() => s.remove());
       }
+      const hd = document.createElement("section"), petSafe = pet.replace(/[<>"&]/g, "");
+      hd.style.marginTop = "40px";
+      $("r").appendChild(hd);
+      if (d.hd === "listo") {  // imprimible de pago ya entregado
+        hd.innerHTML = '<h2>Your print-ready files</h2><p class="small">High resolution, no signature. Print up to 8x10 in at home or at your local pharmacy. ' +
+          'They stay here for at least 30 days after your purchase: download them to keep them.</p>' +
+          '<p><a class="btn" href="#" id="hd1">Download: name on paper border</a></p><p><a class="btn" href="#" id="hd2">Download: Christmas frame</a></p>';
+        const bajarHD = (cual, archivo) => async ev => {
+          ev.preventDefault();
+          const b = ev.currentTarget, antes = b.textContent;
+          b.textContent = "Preparing your file...";
+          try {
+            const x = await pedirEstado(API + "?accion=hd&cual=" + cual + "&id=" + encodeURIComponent(q.get("id")) + "&k=" + encodeURIComponent(q.get("k")));
+            if (!x.ok) throw new Error(x.error);
+            const bin = atob(x.b64), u8 = new Uint8Array(bin.length);  // Blob, no data: (Chrome corta URLs de mas de 2 MB)
+            for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+            const url = URL.createObjectURL(new Blob([u8], {type: "image/jpeg"})), a = document.createElement("a");
+            a.href = url; a.download = archivo;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 60000);
+            b.textContent = "Downloaded";
+          } catch (e) { b.textContent = antes + " (try again)"; }
+        };
+        $("hd1").onclick = bajarHD("borde", "print-ready-portrait.jpg");
+        $("hd2").onclick = bajarHD("navidad", "print-ready-christmas.jpg");
+      } else if (d.hd === "pagado") {  // pago CONFIRMADO por el servidor
+        hd.innerHTML = '<h2>Payment received. Thank you!</h2><p>We are preparing your print-ready files. Refresh this page in a few minutes (usually within an hour).</p>';
+      } else if (q.get("pagado")) {  // vuelta de Stripe: aun sin confirmar (la fabrica lo mira cada 5 min)
+        hd.innerHTML = '<h2>Thank you!</h2><p>We are confirming your payment with Stripe. Your print-ready files will appear here within a few minutes: refresh this page.</p>';
+      } else if (d.comprable && PAGO.startsWith("https://")) {
+        hd.innerHTML = '<h2>Want it on your wall?</h2><p>Get the <b>print-ready version</b> for <b>$9</b>: high resolution (prints up to 8x10 in), no signature, with ' +
+          petSafe + '&rsquo;s name on a soft paper border, plus a Christmas-frame version. Print it at home or at a local photo store.</p>' +
+          '<p><a class="btn" id="comprar">Get it for $9</a></p><p class="small">Secure payment by Stripe. Your files appear on this page, usually within an hour.<br>' +
+          'Files stay on this page for at least 30 days after purchase. Sold by Emely Toledo, Florida, USA &middot; ' +
+          '<a href="privacy.html#terms">Terms of sale</a> &middot; <a href="privacy.html#refunds">Refunds</a>: if something is wrong, write to retratos@emelytugc.com within 14 days.</p>';
+        $("comprar").href = PAGO + "?client_reference_id=" + encodeURIComponent(q.get("id"));
+        $("comprar").onclick = () => {
+          try { const u = new URL(location.href); u.searchParams.delete("nuevo"); u.searchParams.delete("pagado"); u.hash = ""; localStorage.setItem("pedido_actual", u.href); } catch (e) {}
+          evento("clic_comprar");
+        };
+      }
+      const amigo = document.createElement("section");  // invitar a un amigo: difusion que no cuesta nada
+      amigo.style.marginTop = "40px";
+      amigo.innerHTML = '<h2>Know someone who loves their pet?</h2><p>Send them the link. Free portraits are limited each week.</p>' +
+        '<p><a class="btn" href="#" id="invita">Share with a friend</a></p>';
+      $("r").appendChild(amigo);
+      $("invita").onclick = ev => {
+        ev.preventDefault();
+        const b = ev.currentTarget, url = "https://emelytugc.com/pets/";
+        if (navigator.share) {
+          navigator.share({title: "Free pet portrait", text: "A free watercolor portrait of your pet (limited free spots each week), plus a Christmas card with their name:", url})
+            .then(() => evento("invitar")).catch(() => {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(() => { b.textContent = "Link copied!"; evento("invitar"); }, () => prompt("Copy this link:", url));
+        } else {
+          prompt("Copy this link:", url);
+        }
+      };
       $("otra").onclick = async ev => {
         ev.preventDefault();
         if (!confirm("This lets you send another photo of your pet. Continue?")) return;
