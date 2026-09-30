@@ -55,3 +55,6 @@ main section.cta-end{text-align:center;padding-top:8px;padding-bottom:56px}
 .oculto{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .estado{padding-top:28px;padding-bottom:48px;text-align:center}
 .estado .retrato{width:100%;max-width:560px;height:auto;border-radius:14px;box-shadow:0 8px 24px rgba(59,47,42,.15)}
+.hero .par-hero{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:420px;margin:20px auto 0}
+.hero .par-hero img{width:100%;height:auto;border-radius:10px;aspect-ratio:2/3;object-fit:cover}
+.hero .par-hero figcaption{grid-column:1/-1;margin:4px 0 0}

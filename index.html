@@ -5,10 +5,10 @@
 <script>if (location.protocol === "http:" && !/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) location.replace("https:" + location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Free Watercolor Pet Portrait</title>
-<meta name="description" content="Upload a photo of your pet and get a soft watercolor portrait on your own private page. Free, only 50 each week.">
+<meta name="description" content="Upload a photo of your pet and get a soft watercolor portrait on your own private page. Free, up to 50 a week (rolling 7 days).">
 <meta property="og:title" content="Free Watercolor Pet Portrait">
-<meta property="og:description" content="Upload a photo of your pet and get a soft watercolor portrait. Free, only 50 each week.">
-<meta property="og:image" content="https://emelytugc.com/pets/ejemplos/x01_labrador_retrato.jpg">
+<meta property="og:description" content="Upload a photo of your pet and get a soft watercolor portrait. Free, up to 50 a week (rolling 7 days).">
+<meta property="og:image" content="https://emelytugc.com/pets/ejemplos/x10_corgi_retrato.jpg">
 <meta property="og:url" content="https://emelytugc.com/pets/">
 <link rel="canonical" href="https://emelytugc.com/pets/">
 <meta name="twitter:card" content="summary_large_image">
@@ -22,11 +22,12 @@
 
 <header class="hero">
   <div class="wrap">
-    <p class="badge" id="cupo">Only 50 free portraits each week</p>
-    <h1>Your pet, painted in soft watercolor.<br><span>Free.</span></h1>
-    <p class="lead">Upload one photo of your dog, cat or any pet. We turn it into a gentle watercolor portrait and show it on your own private page.</p>
+    <p class="badge" id="cupo">Up to 50 free portraits a week (rolling 7 days)</p>
+    <h1>Your pet as a soft watercolor portrait.<br><span>Free.</span></h1>
+    <p class="lead">Upload one photo of your dog, cat or any pet. We create a gentle watercolor portrait from it with AI, check that it looks like your pet, and show it on your own private page.</p>
     <a class="btn" href="#pedir">Get my free portrait</a>
-    <p class="small">One per person · Usually ready within 48 hours · Free Christmas card included</p>
+    <p class="small">One per person · Usually ready within 48 hours · Free Christmas card included · Optional $9 print files after it's ready</p>
+    <figure class="par-hero"><img src="ejemplos/x10_corgi_foto.jpg" alt="Original photo of a corgi" width="334" height="500"><img src="ejemplos/x10_corgi_retrato.jpg" alt="The same corgi as a free AI watercolor portrait" width="601" height="900"><figcaption class="small">Photo &rarr; free AI watercolor. Stock sample, not a customer.</figcaption></figure>
   </div>
 </header>
 
@@ -36,7 +37,7 @@
     <h2 id="how">How it works</h2>
     <ol>
       <li><span class="n">1</span><div><h3>Upload a photo</h3><p>A clear photo of your pet, face visible, good light.</p></div></li>
-      <li><span class="n">2</span><div><h3>We paint it</h3><p>Your photo becomes a soft watercolor portrait, checked to make sure it looks like your pet.</p></div></li>
+      <li><span class="n">2</span><div><h3>We create it with AI</h3><p>AI tools turn your photo into a soft watercolor portrait, and we check that it looks like your pet.</p></div></li>
       <li><span class="n">3</span><div><h3>Open your private link</h3><p>You get a private link when you send your photo. Your free portrait appears there, ready for your phone and social media.</p></div></li>
     </ol>
   </section>
@@ -52,7 +53,7 @@
       <article class="card accent">
         <p class="price">$9</p>
         <h3>Print-ready keepsake</h3>
-        <p>Large, printable version without the signature, with your pet's name: on a soft paper border or in a Christmas frame. A lovely gift. Available on your private page once your free portrait is ready, for 25 days after your order.</p>
+        <p>Two large JPG files to print yourself, for personal use (nothing is shipped): your portrait without the signature, with your pet's name, on a soft paper border and in a Christmas frame. Available on your private page once your free portrait is ready, for 25 days after your order.</p>
       </article>
     </div>
   </section>
@@ -85,7 +86,7 @@
     <details><summary>Is this made with AI?</summary><p>Yes. Portraits are created with AI tools from your photo and checked for likeness before they are delivered.</p></details>
     <details><summary>What if it doesn't look like my pet?</summary><p>Open your private link and tap &ldquo;Not my pet? Try again&rdquo;. Then you can send another photo.</p></details>
     <details><summary>Which photos work best?</summary><p>One pet per photo, face clearly visible, good light, no people in the picture.</p></details>
-    <details><summary>What do you do with my photo?</summary><p>We only use it to paint your portrait. Our AI provider (OpenAI) processes it for that, and we remove its hidden location data first. We delete it about 30 days after your order (fully erased from our cloud trash within 30 more days) and we never sell it. See our <a href="privacy.html">privacy notice</a>.</p></details>
+    <details><summary>What do you do with my photo?</summary><p>We only use it to create your portrait. Our AI provider (OpenAI) processes it for that, and we remove its hidden location data first. We delete it about 30 days after your order (if you buy the print files, your portrait and files stay 60 days; fully erased from our cloud trash within 30 more days) and we never sell it. See our <a href="privacy.html">privacy notice</a>.</p></details>
   </section>
 
   <section class="wrap pedir" id="pedir" aria-labelledby="pd">
@@ -93,16 +94,16 @@
     <form id="f" novalidate>
       <label for="foto">Your pet's photo</label>
       <input type="file" id="foto" accept="image/*" required>
-      <p class="small ayuda">Your pet alone, facing the camera, in good light. Eyes open is best.</p>
+      <p class="small ayuda">Your pet alone, facing the camera, in good light. Eyes open is best. We use your photo only to make your portrait (AI tools process it). We never post your photo; we share your pet's portrait only if you tick the last box.</p>
       <label for="mascota">Your pet's name</label>
       <input id="mascota" maxlength="30" required autocomplete="off">
       <label for="email">Your email</label>
       <input id="email" type="email" required autocomplete="email" pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}">
       <label for="instagram">Your Instagram (optional)</label>
       <input id="instagram" maxlength="40" autocomplete="off">
-      <label class="check"><input type="checkbox" id="derechos" required> I took this photo or have the right to use it.</label>
-      <label class="check"><input type="checkbox" id="ofertas"> Send me occasional offers (unsubscribe anytime).</label>
-      <label class="check"><input type="checkbox" id="publicar"> You may share my pet's portrait on your social media.</label>
+      <label class="check"><input type="checkbox" id="derechos" required> I took this photo or have the right to use it. (required)</label>
+      <label class="check"><input type="checkbox" id="ofertas"> Send me occasional offers (unsubscribe anytime). (optional)</label>
+      <label class="check"><input type="checkbox" id="publicar"> You may share my pet's portrait on your social media. (optional)</label>
       <input id="hp" name="hp" class="oculto" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button class="btn" id="enviar" type="submit">Send my photo</button>
       <p id="msg" class="msg" role="status" aria-live="polite"></p>
@@ -122,7 +123,7 @@ const FUENTE = (() => { const g = (new URLSearchParams(location.search).get("g")
 const $ = id => document.getElementById(id);
 fetch(API + "?accion=cupo").then(r => r.json()).then(d => {
   if (!d.ok) return;
-  $("cupo").textContent = d.quedan > 0 ? "Only " + d.quedan + " free portraits left" : "All free portraits are taken for now";
+  $("cupo").textContent = d.quedan > 0 ? d.quedan + " of 50 free portraits left · one per person" : "All free portraits are taken for now";  // ventana de 7 dias moviles: no decir "this week"
   if (d.quedan <= 0) { $("enviar").disabled = true; $("msg").textContent = ERR.lleno; }  // "the form closes"
 }).catch(() => {});
 async function reducir(file) {  // 1600 px y JPEG nuevo: la foto viaja ligera y SIN datos de ubicacion
