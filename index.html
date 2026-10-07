@@ -136,11 +136,21 @@ const FUENTE = (() => { const g = (new URLSearchParams(location.search).get("g")
   try { if (g) sessionStorage.setItem("fuente", g); return g || sessionStorage.getItem("fuente") || ""; } catch (e) { return g; } })();  // sessionStorage: dura lo que la pestana (recargas incluidas), no para siempre
 const FUENTE_VISITA = ((new URLSearchParams(location.search).get("g") || "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 30));
 const $ = id => document.getElementById(id);
-if (!automatizado) fetch(API + "?accion=cupo&g=" + encodeURIComponent(FUENTE_VISITA) + "&p=" + encodeURIComponent(location.pathname) + (interno ? "&interno=1" : "")).then(r => r.json()).then(d => {
+if (!automatizado) {
+  try {
+    let referrer = "";
+    try {
+      const refHost = document.referrer ? new URL(document.referrer).hostname.toLowerCase().replace(/^www\./, "").replace(/[^a-z0-9.-]/g, "").slice(0, 40) : "";
+      referrer = refHost === "emelytugc.com" ? "" : refHost;
+    } catch (e) {}
+    const dispositivo = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || "") ? "m" : "d";
+    fetch(API + "?accion=cupo&g=" + encodeURIComponent(FUENTE_VISITA) + "&p=" + encodeURIComponent(location.pathname) + "&r=" + encodeURIComponent(referrer) + "&d=" + dispositivo + (interno ? "&interno=1" : "")).then(r => r.json()).then(d => {
   if (!d.ok) return;
   $("cupo").textContent = d.quedan > 0 ? d.quedan + " of 50 free portraits left · one per person" : "All free portraits are taken for now";  // ventana de 7 dias moviles: no decir "this week"
   if (d.quedan <= 0) { $("enviar").disabled = true; $("msg").textContent = ERR.lleno; }  // "the form closes"
 }).catch(() => {});
+  } catch (e) {}
+}
 async function reducir(file) {  // 1600 px y JPEG nuevo: la foto viaja ligera y SIN datos de ubicacion
   const img = await createImageBitmap(file);
   const k = Math.min(1, 1600 / Math.max(img.width, img.height));
