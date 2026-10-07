@@ -117,11 +117,26 @@
 </main>
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxVTytIhXMh8Al6qhgX6c2UeSUbcJsaWSSMMWDJ8_NSrJEe4XX5BwSLR4hcB7Z5EvGn/exec";
+const PARAMS = new URLSearchParams(location.search);
+let interno = false;
+try {
+  if (PARAMS.get("nocontar") === "1") localStorage.setItem("emely_interno", "1");
+  interno = localStorage.getItem("emely_interno") === "1";
+} catch (e) { interno = PARAMS.get("nocontar") === "1"; }
+if (interno) {
+  const aviso = document.createElement("p");
+  aviso.textContent = "This device won't be counted";
+  aviso.setAttribute("role", "status");
+  aviso.style.cssText = "font-size:.78rem;opacity:.7;margin:.35rem 0";
+  document.querySelector("#cupo").insertAdjacentElement("afterend", aviso);
+}
+const automatizado = navigator.webdriver === true || /bot|crawler|spider|preview|facebookexternalhit|headless/i.test(navigator.userAgent || "");
 // de donde viene la visita (?g=fb1 en el enlace de cada grupo/post): se guarda con el pedido para saber que canal funciona
 const FUENTE = (() => { const g = (new URLSearchParams(location.search).get("g") || "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 30);
   try { if (g) sessionStorage.setItem("fuente", g); return g || sessionStorage.getItem("fuente") || ""; } catch (e) { return g; } })();  // sessionStorage: dura lo que la pestana (recargas incluidas), no para siempre
+const FUENTE_VISITA = ((new URLSearchParams(location.search).get("g") || "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 30));
 const $ = id => document.getElementById(id);
-fetch(API + "?accion=cupo").then(r => r.json()).then(d => {
+if (!automatizado) fetch(API + "?accion=cupo&g=" + encodeURIComponent(FUENTE_VISITA) + "&p=" + encodeURIComponent(location.pathname) + (interno ? "&interno=1" : "")).then(r => r.json()).then(d => {
   if (!d.ok) return;
   $("cupo").textContent = d.quedan > 0 ? d.quedan + " of 50 free portraits left · one per person" : "All free portraits are taken for now";  // ventana de 7 dias moviles: no decir "this week"
   if (d.quedan <= 0) { $("enviar").disabled = true; $("msg").textContent = ERR.lleno; }  // "the form closes"
